@@ -3,6 +3,12 @@ from . import views
 
 app_name = "website"
 urlpatterns = [
+    # ex. /login
+    path("login", views.login_user, name='login'),
+    # ex. /logout
+    path("logout", views.user_logout, name='logout'),
+    # ex. /register
+    path("register", views.register, name='register'),
     # ex. /
     path("", views.index, name='index'),
     # ex. bill/hr7397
@@ -13,10 +19,7 @@ urlpatterns = [
     path("bill/<str:bill_slug>/edit", views.edit_saved_bill, name="edit_saved_bill"),
     # ex. bill/hr7397/delete
     path("bill/<str:bill_slug>/delete", views.delete_bill, name="delete_bill"),
-    # ex. /login
-    path("login", views.login_user, name='login'),
-    # ex. /logout
-    path("logout", views.user_logout, name='logout'),
-    # ex. /register
-    path("register", views.register, name='register'),
+    # ex. /saved
+    path("saved", views.list_saved_bills, name="list_saved_bills"),
+
 ]

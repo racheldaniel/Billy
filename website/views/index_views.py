@@ -42,12 +42,14 @@ def bill_details(request, bill_slug):
             template_name = 'bill_details.html'
             return render(request, template_name, context)
 
+
 def save_bill(request, bill_slug):
     user = request.user
     comment = request.POST["comment"]
     new_user_bill = UserBill(user=user, pp_bill_id=bill_slug, comment=comment)
     new_user_bill.save()
     return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
+
 
 def edit_saved_bill(request, bill_slug):
     user = request.user
@@ -56,6 +58,7 @@ def edit_saved_bill(request, bill_slug):
     saved_bill.save()
     return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
 
+
 def delete_bill(request, bill_slug):
     user = request.user
     saved_bill = UserBill.objects.filter(user_id=user, pp_bill_id=bill_slug)[0]
@@ -63,4 +66,18 @@ def delete_bill(request, bill_slug):
     return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
 
 
+def list_saved_bills(request):
+    user = request.user
+    saved_bills = UserBill.objects.filter(user_id=user)
+    bills = []
+    for saved_bill in saved_bills:
+        url = f'https://api.propublica.org/congress/v1/115/bills/{saved_bill.pp_bill_id}.json'
+        headers = {'X-API-Key': 'S6kqwpSxckFECU8hUHE3obzUfli28WzAOrNs1Qrh'}
+        r = requests.get(url, headers=headers).json()
+        bill = r["results"][0]
+        bill["comment"] = saved_bill.comment
+        bills.append(bill)
+    context={"bills": bills}
+    template_name = 'saved_bills.html'
+    return render(request, template_name, context)
 
