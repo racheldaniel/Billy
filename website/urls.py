@@ -11,6 +11,8 @@ urlpatterns = [
     path("bill/<str:bill_slug>/save", views.save_bill, name="save_bill"),
     # ex. bill/hr7397/edit
     path("bill/<str:bill_slug>/edit", views.edit_saved_bill, name="edit_saved_bill"),
+    # ex. bill/hr7397/delete
+    path("bill/<str:bill_slug>/delete", views.delete_bill, name="delete_bill"),
     # ex. /login
     path("login", views.login_user, name='login'),
     # ex. /logout

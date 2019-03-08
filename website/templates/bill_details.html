@@ -5,9 +5,14 @@
 {% if saved%}
 <dl id="savedDetails" class="row detailView" >
     <dt class="col-sm-4">Your Notes:</dt>
+    {% if saved.comment %}
     <dd class="col-sm-8">{{saved.comment}}</dd>
+    {% else %}
+    <dd class="col-sm-8">No Notes</dd>
+    {% endif %}
     <button id="edit" class="btn btn-info">Edit</button>
-    <button id="deleteSavedBill"  class="btn btn-danger">Remove from Saved</button>
+    <form action="{% url 'website:delete_bill' bill.bill_slug %}" method="POST">{% csrf_token %}<button type="submit" id="deleteSavedBill"  class="btn btn-danger">Remove from Saved</button></form>
+
 </dl>
 <form id="editForm" action="{% url 'website:edit_saved_bill' bill.bill_slug %}" method="POST">
     {% csrf_token %}

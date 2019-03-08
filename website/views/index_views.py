@@ -52,9 +52,14 @@ def save_bill(request, bill_slug):
 def edit_saved_bill(request, bill_slug):
     user = request.user
     saved_bill = UserBill.objects.filter(user_id=user, pp_bill_id=bill_slug)[0]
-    print(saved_bill)
     saved_bill.comment = request.POST["editComment"]
     saved_bill.save()
+    return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
+
+def delete_bill(request, bill_slug):
+    user = request.user
+    saved_bill = UserBill.objects.filter(user_id=user, pp_bill_id=bill_slug)[0]
+    saved_bill.delete()
     return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
 
 
