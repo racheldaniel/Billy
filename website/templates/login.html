@@ -23,6 +23,7 @@
         <input class="btn btn-primary" type="Submit" value="Submit" />
       </div>
     </form>
+    <a href="{% url 'website:register' %}">Register</a>
     {% if next != "/" %}
       <a class ="btn btn-primary" href="/register?next={{next}}">Register</a>
     {% endif %}
