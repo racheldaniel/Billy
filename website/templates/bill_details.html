@@ -2,7 +2,23 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<form action="{% url 'website:bill_details'  bill.bill_slug %}" method="POST">
+{% if saved%}
+<dl id="savedDetails" class="row detailView" >
+    <dt class="col-sm-4">Your Notes:</dt>
+    <dd class="col-sm-8">{{saved.comment}}</dd>
+    <button id="edit" class="btn btn-info">Edit</button>
+    <button id="deleteSavedBill"  class="btn btn-danger">Remove from Saved</button>
+</dl>
+<form id="editForm" action="{% url 'website:edit_saved_bill' bill.bill_slug %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="editComment">Edit Comment</label>
+      <input type="textarea" class="form-control" name="editComment" id="editComment" value="{{ saved.comment }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+{% else %}
+<form action="{% url 'website:save_bill'  bill.bill_slug %}" method="POST">
     {% csrf_token %}
     <div class="form-group">
       <label for="comment">Save This Bill</label>
@@ -10,6 +26,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
   </form>
+  {% endif %}
 {% endif %}
 <h5>{{bill.title}}</h5>
 <dl class="row detailView" >
@@ -30,3 +47,18 @@
   </dl>
 
 {% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    $("#editForm").hide()
+
+    $('#edit').click(function() {
+      $("#editForm").show()
+      $("#savedDetails").hide()
+    })
+
+  })
+</script>
+{% endblock %}

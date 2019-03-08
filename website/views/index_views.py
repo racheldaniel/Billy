@@ -33,16 +33,29 @@ def bill_details(request, bill_slug):
             headers = {'X-API-Key': 'S6kqwpSxckFECU8hUHE3obzUfli28WzAOrNs1Qrh'}
             r = requests.get(url, headers=headers).json()
             bill = r["results"][0]
-            context={"bill": bill, "user": user}
+            saved = ""
+            saved_bills = UserBill.objects.filter(user_id=user)
+            for saved_bill in saved_bills:
+                if bill_slug == saved_bill.pp_bill_id:
+                    saved = saved_bill
+            context={"bill": bill, "user": user, "saved": saved}
             template_name = 'bill_details.html'
             return render(request, template_name, context)
 
-    else:
-        comment = request.POST["comment"]
-        bill_id = bill_slug
-        new_user_bill = UserBill(user=user, pp_bill_id=bill_id, comment=comment)
-        new_user_bill.save()
-        return HttpResponseRedirect(reverse("website:index"))
+def save_bill(request, bill_slug):
+    user = request.user
+    comment = request.POST["comment"]
+    new_user_bill = UserBill(user=user, pp_bill_id=bill_slug, comment=comment)
+    new_user_bill.save()
+    return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
+
+def edit_saved_bill(request, bill_slug):
+    user = request.user
+    saved_bill = UserBill.objects.filter(user_id=user, pp_bill_id=bill_slug)[0]
+    print(saved_bill)
+    saved_bill.comment = request.POST["editComment"]
+    saved_bill.save()
+    return HttpResponseRedirect(reverse("website:bill_details", kwargs={"bill_slug": bill_slug}))
 
 
 
