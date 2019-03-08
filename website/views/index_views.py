@@ -34,10 +34,11 @@ def bill_details(request, bill_slug):
             r = requests.get(url, headers=headers).json()
             bill = r["results"][0]
             saved = ""
-            saved_bills = UserBill.objects.filter(user_id=user)
-            for saved_bill in saved_bills:
-                if bill_slug == saved_bill.pp_bill_id:
-                    saved = saved_bill
+            if user.is_authenticated:
+                saved_bills = UserBill.objects.filter(user_id=user)
+                for saved_bill in saved_bills:
+                    if bill_slug == saved_bill.pp_bill_id:
+                        saved = saved_bill
             context={"bill": bill, "user": user, "saved": saved}
             template_name = 'bill_details.html'
             return render(request, template_name, context)
