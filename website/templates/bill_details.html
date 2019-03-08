@@ -1,8 +1,17 @@
 {% extends 'index.html' %}
 
 {% block content %}
-
-<h3>{{bill.title}}</h3>
+{% if user.is_authenticated %}
+<form action="{% url 'website:bill_details'  bill.bill_slug %}" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="comment">Save This Bill</label>
+      <input type="textarea" class="form-control" name="comment" id="comment" placeholder="Add Notes (optional)">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+{% endif %}
+<h5>{{bill.title}}</h5>
 <dl class="row detailView" >
     <dt class="col-sm-4">Sponsor:</dt>
     <dd class="col-sm-8">{{bill.sponsor_title}} {{bill.sponsor}} ({{bill.sponsor_party}})</dd>

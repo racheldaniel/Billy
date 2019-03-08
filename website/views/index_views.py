@@ -27,11 +27,22 @@ def bill_details(request, bill_slug):
 
     Parameters -- bill_slug: on proPublica api, bill_slug is the bill_id without the congress number
     """
+    user = request.user
     if request.method == "GET":
             url = f'https://api.propublica.org/congress/v1/115/bills/{bill_slug}.json'
             headers = {'X-API-Key': 'S6kqwpSxckFECU8hUHE3obzUfli28WzAOrNs1Qrh'}
             r = requests.get(url, headers=headers).json()
             bill = r["results"][0]
-            context={"bill": bill}
+            context={"bill": bill, "user": user}
             template_name = 'bill_details.html'
             return render(request, template_name, context)
+
+    else:
+        comment = request.POST["comment"]
+        bill_id = bill_slug
+        new_user_bill = UserBill(user=user, pp_bill_id=bill_id, comment=comment)
+        new_user_bill.save()
+        return HttpResponseRedirect(reverse("website:index"))
+
+
+
