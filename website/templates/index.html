@@ -35,31 +35,30 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar_collapse_content">
-        {% comment %}
-        <!-- <ul class="navbar-nav mr-lg-auto">
-          <li class="nav-item"><a class="nav-link" href="{% url 'website:products' %}">Home</a></li>
+        <ul class="navbar-nav mr-lg-auto">
           {% if user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'website:sell' %}">Saved Bills</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'website:logout' %}">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'website:login' %}">Login</a></li>
           {% endif %}
-        </ul> -->
-        {% endcomment %}
+        </ul>
       </div>
     </nav>
     <br />
     <div class="container body-content pb-5">
     {% block content %}
-
-      <h1>Welcome to Billy</h1>
-      {% if user.is_authenticated %}
-      <h1>Hello {{ user.username }}!</h1>
-      <a href="{% url 'website:logout' %}">Logout</a>
-      {% else %}
-      <div class="mt-4">
-        <a class="btn btn-primary mr-2" href="{% url 'website:register' %}">Register</a>
-        <a class="btn btn-primary" href="{% url 'website:login' %}">Login</a>
+    <h1>Recent House and Senate Bills</h1>
+      <div class="list-group">
+        {% for bill in bills %}
+          <a href="{% url 'website:bill_details' bill.bill_slug %}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ bill.short_title }}</h5>
+            </div>
+            <p class="mb-1">{{ bill.summary_short }}</p>
+            <small>Latest Action: {{ bill.latest_major_action_date }} {{bill.latest_major_action}} </small>
+          </a>
+        {% endfor %}
       </div>
-      {% endif %}
-
     {% endblock content %}
     </div>
   </div>
