@@ -16,7 +16,8 @@ def index(request):
         url = 'https://api.propublica.org/congress/v1/115/both/bills/active.json'
         headers = {'X-API-Key': 'S6kqwpSxckFECU8hUHE3obzUfli28WzAOrNs1Qrh'}
         r = requests.get(url, headers=headers).json()
-        context={}
+        bills = r["results"][0]["bills"]
+        context={"bills": bills}
         template_name = 'index.html'
         return render(request, template_name, context)
 
