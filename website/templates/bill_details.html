@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h3>{{bill.title}}</h3>
+<dl class="row detailView" >
+    <dt class="col-sm-4">Sponsor:</dt>
+    <dd class="col-sm-8">{{bill.sponsor_title}} {{bill.sponsor}} ({{bill.sponsor_party}})</dd>
+    <dt class="col-sm-4">State:</dt>
+    <dd class="col-sm-8">{{bill.sponsor_state}}</dd>
+    <dt class="col-sm-4">Subject:</dt>
+    <dd class="col-sm-8">{{bill.primary_subject}}</dd>
+    <dt class="col-sm-4">Committee:</dt>
+    <dd class="col-sm-8">{{bill.committees}}</dd>
+    <dt class="col-sm-4">Introduced Date:</dt>
+    <dd class="col-sm-8">{{bill.introduced_date}}</dd>
+    <dt class="col-sm-4">Latest Major Action:</dt>
+    <dd class="col-sm-8">{{bill.latest_major_action_date}}: {{bill.latest_major_action}} </dd>
+    <dt class="col-sm-4">Summary:</dt>
+    <dd class="col-sm-8">{{bill.summary}}</dd>
+  </dl>
+
+{% endblock content %}

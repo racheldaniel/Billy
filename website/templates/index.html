@@ -45,12 +45,12 @@
       </div>
     </nav>
     <br />
-    <h1>Recent House and Senate Bills</h1>
     <div class="container body-content pb-5">
     {% block content %}
+    <h1>Recent House and Senate Bills</h1>
       <div class="list-group">
         {% for bill in bills %}
-          <a href="#" class="list-group-item list-group-item-action">
+          <a href="{% url 'website:bill_details' bill.bill_slug %}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ bill.short_title }}</h5>
             </div>
